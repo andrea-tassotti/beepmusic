@@ -21,8 +21,11 @@ Questi parametri altro non fanno che produrre il rapporto tra le durate di note 
 Se volessimo realizzare un metronomo per una divisione 4/4 avremo:
 
 A5:4:
+
 A4:4:
+
 A4:4:
+
 A4:4:
 
 Ma questo andrebbe bene se il generatore di toni fosse di natura impulsiva e le note poste all’inizio dei quarti della misura decadessero in ampiezza prima di esaurire la loro durata (caso tipico di una partitura MIDI per un drum kick).
@@ -32,8 +35,11 @@ Questo non é quasi mai valido in generale, e non é assolutamete vero nel caso 
 Per questo la giusta partitura potrebbe essere:
 
 A5:16:
+
 A4:16:
+
 A4:16:
+
 A4:16:
 
 Dato che questo è poco intuitivo per un musicista, introduciamo un meccanismo di “umanizzazione” indicando nella “partitura” i portamenti “legato” (comportamanto naturale) e “staccato” (meccanismo per emulare suoni di natura impulsiva). Questo sintatticamente verrà collocato all’interno di una riga di commento. La riga di commento potrà essere inoltre utilizzata per indicare l’inizio della “misura” (o battuta). Questo potrà essere d’ausilio nella verifica (anche automatica) della trascrizione.
