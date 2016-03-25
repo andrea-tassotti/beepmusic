@@ -15,24 +15,29 @@
 #
 #    Copyrights 2016 Andrea Tassotti
 #
+#	 @date:
+#	 @version:
+#
 declare -A note_value_durations
 declare -A freqmap
 
 LINUX_OUTPUT=true
 legato=true
 
-# Read Tones Map
-# TODO: file name from configuration
-if [ -f tones.dat ]; then
-while read line
-do
-	if [[ $line =~ ^# ]]; then continue; fi
-	freqmap[${line%=*}]=${line#*=}
-done < tones.dat
-else
-	echo ERROR: missing tones.dat
-fi
-
+#
+#
+#
+function usage()
+{
+	echo "score2beep (C)2016 Andrea Tassotti"
+	echo "score2beep [-b|-l] [-t <tonefilename>] < file.score > beepmusic"
+	echo
+	echo WHERE
+	echo "  -b FreeBSD mode"
+	echo "  -l Linux mode"
+	echo "  -t filename of precalculated tones"
+	echo
+}
 
 
 #
@@ -94,10 +99,49 @@ beats_per_measure=4
 note_value=4
 measure=1	# as score notation
 calculated_measure=1	# from note duration sum: must be < $measure
+tones_file=~/tones.dat 
 
 
 # Preroll
 calculate_time $beats_per_measure $note_value $tempo
+
+#
+# Main
+#
+OPTIND=1
+while getopts blt:h opt
+do
+	case $opt in
+	l)
+		LINUX_OUTPUT=true
+		;;
+	b)
+		LINUX_OUTPUT=false
+		;;
+	t)
+		tones_file=$OPTARG
+		;;
+	h)
+		usage
+		;;
+	*)
+		usage
+		;;
+	esac
+done
+shift $( expr $OPTIND - 1 )
+
+# Read Tones Map
+if [ -f $tones_file ]; then
+while read line
+do
+	if [[ $line =~ ^# ]]; then continue; fi
+	freqmap[${line%=*}]=${line#*=}
+done < $tones_file
+else
+	echo ERROR: missing tones.dat
+	exit 2
+fi
 
 #
 # Linux command line have no length limits
@@ -200,4 +244,5 @@ fi
 	esac
 done
 
+[[ $LINUX_OUTPUT = "true" ]] && echo >&2
 echo Processed $calculated_measure measure. >&2
