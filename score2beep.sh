@@ -16,7 +16,7 @@
 #    Copyrights 2016 Andrea Tassotti
 #
 #	 @date:
-#	 @version:
+#	 @version: 1.0
 #
 declare -A note_value_durations
 declare -A freqmap
